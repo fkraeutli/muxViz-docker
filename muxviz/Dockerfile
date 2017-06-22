@@ -12,5 +12,5 @@ RUN wget https://github.com/manlius/muxViz/archive/master.zip && \
   unzip master.zip
 RUN R -e "options('repos'='http://cran.us.r-project.org'); install.packages('devtools'); install.packages('stringi'); install.packages('XML'); install.packages('shiny'); devtools::install_github('trestletech/ShinyDash');"
 WORKDIR /muxViz-master
-CMD sed -i.bu 's/runApp\(getwd\(\)\)/runApp\(getwd\(\), 8080\)/g' muxVizGUI.R
+RUN sed -i.bu 's/runApp(getwd())/runApp(getwd(),8080)/' muxVizGUI.R
 CMD R -e "options('repos'='http://cran.us.r-project.org'); source('/muxViz-master/muxVizGUI.R')"
