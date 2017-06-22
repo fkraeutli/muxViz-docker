@@ -1,6 +1,6 @@
 version: '2'
 services:
-  muxViz:
+  muxviz:
     build: ./muxviz
     ports:
       - "8080:8080"
