@@ -1,16 +1,28 @@
 FROM r-base:3.4.0
 RUN apt-get update
+
+# Install required pacakages
 RUN apt-get install -y \
   libgdal-dev \
   libproj-dev \
   libssl-dev \
   r-cran-rgl \
   openbox
+
+# Install xorg and suppress the dialogue asking for keyboard layout
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y xorg \
     && rm -rf /var/lib/apt/lists/*
+
+# Download and unzip muxViz
 RUN wget https://github.com/manlius/muxViz/archive/master.zip && \
   unzip master.zip
+
+# Download required R Packages
 RUN R -e "options('repos'='http://cran.us.r-project.org'); install.packages('devtools'); install.packages('stringi'); install.packages('XML'); install.packages('shiny'); devtools::install_github('trestletech/ShinyDash');"
+
 WORKDIR /muxViz-master
-RUN sed -i.bu 's/runApp(getwd())/runApp(getwd(),8080, false, "0.0.0.0")/' muxVizGUI.R
+
+# Replace line so that muxViz exposes Port 8080 and is accessible from external machines
+RUN sed -i.bu 's/runApp(getwd())/runApp(getwd(),8080, "false", "0.0.0.0")/' muxVizGUI.R
+
 CMD R -e "options('repos'='http://cran.us.r-project.org'); source('/muxViz-master/muxVizGUI.R')"
