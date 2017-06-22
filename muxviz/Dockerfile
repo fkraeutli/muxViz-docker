@@ -31,4 +31,5 @@ RUN R -e "source('/muxViz-master/initialise.R')"
 # Replace line so that muxViz exposes Port 8080 and is accessible from external machines
 RUN sed -i.bu 's/runApp(getwd())/runApp(getwd(),8080, "false", "0.0.0.0")/' muxVizGUI.R
 
+EXPOSE 8080
 CMD R -e "options('repos'='http://cran.us.r-project.org'); source('/muxViz-master/muxVizGUI.R')"
