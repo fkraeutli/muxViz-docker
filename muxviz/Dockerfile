@@ -22,6 +22,7 @@ RUN wget https://github.com/manlius/muxViz/archive/master.zip && \
 RUN R -e "options('repos'='http://cran.us.r-project.org'); install.packages('devtools'); install.packages('stringi'); install.packages('XML'); install.packages('shiny'); devtools::install_github('trestletech/ShinyDash');"
 
 WORKDIR /muxViz-master
+VOLUME /muxViz-master/data
 
 # Copy muxVizGUI.R and remove runApp() call, so that dependencies are loaded and persisted in the image
 RUN cp muxVizGUI.R initialise.R
