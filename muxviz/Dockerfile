@@ -8,6 +8,8 @@ RUN apt-get install -y \
   libproj-dev \
   libssl-dev \
   r-cran-rgl \
+  mesa-common-dev \
+  libglu1-mesa-dev \
   openbox
 
 # Install xorg and suppress the dialogue asking for keyboard layout
@@ -19,7 +21,7 @@ RUN wget https://github.com/manlius/muxViz/archive/master.zip && \
   unzip master.zip
 
 # Download required R Packages
-RUN R -e "options('repos'='http://cran.us.r-project.org'); install.packages('devtools'); install.packages('stringi'); install.packages('XML'); install.packages('shiny'); devtools::install_github('trestletech/ShinyDash');"
+RUN R -e "options('repos'='http://cran.us.r-project.org'); install.packages('devtools'); install.packages('stringi'); install.packages('XML'); install.packages('rgl'); install.packages('sp'); install.packages('rgdal'); install.packages('shiny'); devtools::install_github('trestletech/ShinyDash'); "
 
 WORKDIR /muxViz-master
 VOLUME /muxViz-master/data
@@ -33,4 +35,4 @@ RUN R -e "source('/muxViz-master/initialise.R')"
 RUN sed -i.bu 's/runApp(getwd())/runApp(getwd(),8080, "false", "0.0.0.0")/' muxVizGUI.R
 
 EXPOSE 8080
-CMD R -e "options('repos'='http://cran.us.r-project.org'); source('/muxViz-master/muxVizGUI.R')"
+CMD R -e "options('repos'='http://cran.us.r-project.org');options(rgl.useNULL = FALSE);source('/muxViz-master/muxVizGUI.R')"
