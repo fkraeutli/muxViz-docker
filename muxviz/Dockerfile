@@ -25,6 +25,7 @@ RUN R -e "options('repos'='http://cran.us.r-project.org'); install.packages('dev
 
 WORKDIR /muxViz-master
 VOLUME /muxViz-master/data
+VOLUME /muxViz-master/export
 
 # Copy muxVizGUI.R and remove runApp() call, so that dependencies are loaded and persisted in the image
 RUN cp muxVizGUI.R initialise.R
